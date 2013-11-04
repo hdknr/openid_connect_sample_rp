@@ -81,13 +81,13 @@ class Provider < ActiveRecord::Base
     @client ||= OpenIDConnect::Client.new as_json
   end
 
-  def authorization_uri(redirect_uri, nonce)
+  def authorization_uri(redirect_uri, nonce, scope = [:openid, :email, :profile, :address])
     client.redirect_uri = redirect_uri
     client.authorization_uri(
       response_type: :code,
       nonce: nonce,
       state: nonce,
-      scope: [:openid, :email, :profile, :address],
+      scope: scope,
       # scope: [:openid, :profile, :address, :email, :address, :phone],
       # request: OpenIDConnect::RequestObject.new(
       #   id_token: {
@@ -96,7 +96,7 @@ class Provider < ActiveRecord::Base
       #       auth_time: nil,
       #       acr: {
       #         values: ['0', '1', '2']
-      #       }
+     #       }
       #     }
       #   },
       #   userinfo: {

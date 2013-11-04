@@ -17,7 +17,7 @@
         <%= text_field_tag :host, nil, placeholder: 'connect-op.heroku.com' %>
         <%= submit_tag 'providers.create.title'.t %>
         <div>
-            <% ['profile','email','address','auth_imap', 'auth_smtp', 'auth_sshd'].each do |s| %>
+            <% ['profile','email','address','auth_imap', 'auth_smtp', 'auth_ssh'].each do |s| %>
               <%= check_box_tag "scope_#{s}", 'true' %>
               <%= label_tag "#{s}", s.upcase %>
             <% end %>
