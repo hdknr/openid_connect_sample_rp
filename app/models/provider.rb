@@ -124,8 +124,30 @@ class Provider < ActiveRecord::Base
     )
   end
 
+
+  def public_key
+    if jwkset
+      #: if jwkset is previsouly stored to this provider, use this jwkset.
+      public_keys.first 
+    else
+      #: Otherwise,dynamically fetched from jku.
+      config.public_keys.first
+    end
+  end
+  
+  def jwks
+    @jwks ||= JSON.parse( jwkset ).with_indifferent_access
+    JSON::JWK::Set.new @jwks[:keys]
+  end 
+
+  def public_keys
+    @public_keys ||= jwks.collect do |jwk|
+      JSON::JWK.decode jwk
+    end
+  end
+
   def decode_id(id_token)
-    OpenIDConnect::ResponseObject::IdToken.decode id_token, config.public_keys.first
+    OpenIDConnect::ResponseObject::IdToken.decode id_token, public_key
   end
 
   def authenticate(redirect_uri, code, nonce)
