@@ -33,6 +33,12 @@ class Provider < ActiveRecord::Base
   end
 
   def register!(redirect_uri)
+    begin
+        jwkset = OpenIDConnect.http_client.get_content(config.jwks_uri)
+    rescue
+        jwkset = nil
+    end
+
     client = OpenIDConnect::Client::Registrar.new(
       config.registration_endpoint,
       client_name: 'NOV RP',
@@ -48,6 +54,7 @@ class Provider < ActiveRecord::Base
       token_endpoint:         config.token_endpoint,
       userinfo_endpoint:      config.userinfo_endpoint,
       jwks_uri:               config.jwks_uri,
+      jwkset:                 jwkset,           
       dynamic:                true,
       expires_at:             client.expires_in.try(:from_now)
     }
