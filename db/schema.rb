@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110909022417) do
+ActiveRecord::Schema.define(:version => 20131119094759) do
 
   create_table "accounts", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20110909022417) do
     t.datetime "expires_at"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+    t.text     "jwkset"
   end
 
 end
