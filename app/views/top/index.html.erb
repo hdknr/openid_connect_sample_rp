@@ -19,8 +19,11 @@
         <div>
             <% ['profile','email','address','auth_imap', 'auth_smtp', 'auth_ssh'].each do |s| %>
               <%= check_box_tag "scope_#{s}", 'true' %>
-              <%= label_tag "#{s}", s.upcase %>
+              <%= label_tag "scope_#{s}", s.upcase %>
             <% end %>
+        </div>
+        <div>
+            <%= check_box_tag "implicit", 'true' %> <label for="implicit" >Implicit?</label>
         </div>
       <% end %>
     </div>

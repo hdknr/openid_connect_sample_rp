@@ -13,6 +13,8 @@ class ProvidersController < ApplicationController
                 k.index('scope_')==0 }.map{|k,v| 
                     k.sub('scope_','')}
 
+    response_type = params[:implicit]  == "true" ? "id_token token" : "code"
+
     provider = Provider.discover! params[:host]
     unless provider.registered?
       provider.register! provider_open_id_url(provider)
@@ -20,6 +22,7 @@ class ProvidersController < ApplicationController
     redirect_to provider.authorization_uri(
       provider_open_id_url(provider),
       new_nonce,
+      response_type,
       scopes
     )
   end
