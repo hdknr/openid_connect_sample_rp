@@ -14,7 +14,6 @@ class ProvidersController < ApplicationController
                     k.sub('scope_','')}
 
     response_type = params[:implicit]  == "true" ? "id_token token" : "code"
-
     provider = Provider.discover! params[:host]
     unless provider.registered?
       provider.register! provider_open_id_url(provider)

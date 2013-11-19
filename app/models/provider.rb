@@ -55,7 +55,15 @@ class Provider < ActiveRecord::Base
   end
 
   def self.discover!(host)
-    issuer = OpenIDConnect::Discovery::Provider.discover!(host).issuer
+    #: for the case in which the flow is implicit ,
+    #: and OpenID Configration + Client Registration have been manually finished,
+    #: search "host" as "iss"
+    begin
+        issuer = OpenIDConnect::Discovery::Provider.discover!(host).issuer
+    rescue
+        issuer = host
+    end
+
     if provider = find_by_issuer(issuer)
       provider
     else
