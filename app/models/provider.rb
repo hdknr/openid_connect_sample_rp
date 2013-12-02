@@ -167,10 +167,9 @@ class Provider < ActiveRecord::Base
     open_id.account || Account.create!(open_id: open_id)
   end
 
-  def authenticate_by_id_token(id_token,state)
+  def authenticate_by_id_token(id_token,state,nonce)
     #:TODO: Implement correctly! by HDKNR
     #: Under construction.
-    nonce ="implement later"
 
     _id_token_ = decode_id id_token
     _id_token_.verify!(

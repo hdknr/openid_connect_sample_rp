@@ -51,9 +51,17 @@
     RelayToken: function (url,callback) {
         // calllback proto = function(data){ .... } 
         token = $.FVAR("id_token");
-        state = $.FVAR("state")
+        state = $.FVAR("state");
         if (token) {
-            $.post(url, { id_token: token, state: state }).done(callback);
+            //$.post(url, { id_token: token, state: state }).done(callback);
+            $.ajax({
+                url: url,
+                data: { id_token: token, state: state , nonce : '<%=session[:nonce]%>'},
+                type: 'POST',
+                beforeSend: function(xhr){
+                   xhr.withCredentials = true;
+                }
+            }).done(callback);
         }
     }
 });
