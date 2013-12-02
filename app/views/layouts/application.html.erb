@@ -18,6 +18,7 @@
       <%= yield %>
     </div>
     <%= render 'layouts/footer' %>
+    <%= yield :bottom_script %>
     <%= yield :bottom %>
   <% end %>
 </html>

@@ -136,6 +136,7 @@ class Provider < ActiveRecord::Base
   end
   
   def jwks
+    #:TODO: Check Jwk with x5c raise exception by HDKNR
     @jwks ||= JSON.parse( jwkset ).with_indifferent_access
     JSON::JWK::Set.new @jwks[:keys]
   end 
@@ -164,5 +165,23 @@ class Provider < ActiveRecord::Base
     open_id.access_token, open_id.id_token = access_token.access_token, access_token.id_token
     open_id.save!
     open_id.account || Account.create!(open_id: open_id)
+  end
+
+  def authenticate_by_id_token(id_token,state)
+    #:TODO: Implement correctly! by HDKNR
+    #: Under construction.
+    nonce ="implement later"
+
+    _id_token_ = decode_id id_token
+    _id_token_.verify!(
+      issuer: issuer,
+      client_id: identifier,
+      nonce: nonce
+    )
+    open_id = self.open_ids.find_or_initialize_by_identifier _id_token_.subject
+    open_id.id_token = id_token
+    open_id.save!
+    open_id.account || Account.create!(open_id: open_id)
+
   end
 end

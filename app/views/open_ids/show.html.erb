@@ -1,0 +1,71 @@
+<section>
+<h2>OpenID Conect Response</h2>
+<p>Experimental implimentation for the Implicit Flow </p>
+</section>
+
+<% content_for :bottom_script do %>
+  <script type="text/javascript">
+  $.extend({
+
+    _: function () {
+        var args = Array.prototype.slice.call(arguments);
+        args.unshift();
+        ret = args.join(' ');
+        return ret
+    },
+
+    GET: function () {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    },
+    FGET: function () {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('#') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    },
+    VAR: function (name) {
+        return $.GET()[name];
+    },
+    FVAR:function (name){
+        return $.FGET()[name];
+    },
+    QUERY: function () {
+        ret = window.location.href.split('?')[1];
+        return (ret == undefined) ? '' : '?' + ret;
+    },
+    FRAGMENT: function () {
+        ret = window.location.href.split('#')[1];
+        return (ret == undefined) ? '' : '#' + ret;
+    },
+    RelayToken: function (url,callback) {
+        // calllback proto = function(data){ .... } 
+        token = $.FVAR("id_token");
+        state = $.FVAR("state")
+        if (token) {
+            $.post(url, { id_token: token, state: state }).done(callback);
+        }
+    }
+});
+  </script> 
+  <script type="text/javascript">
+    $(function() {
+       url = "./open_id/verify";
+       $.RelayToken(url,
+           function (data) {
+               alert(data["iss"]);
+               alert(data["sub"]);
+           });    
+    });
+  </script>
+<% end %> 
